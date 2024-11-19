@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: namespaxe/php_app_mysql:1.5
+        image: namespaxe/php_app_mysql:1.6
         ports:
         - containerPort: 3306
         env:
@@ -38,13 +38,20 @@ spec:
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
+        - name: mysql-config-volume
+          mountPath: /etc/mysql/conf.d
+          subPath: my.cnf
         resources:
-            requests:
-              memory: "250Mi"
-              cpu: "80m"
-            limits:
-              memory: "250Mi"
-              cpu: "80m"
+          requests:
+            memory: "850Mi"
+            cpu: "80m"
+          limits:
+            memory: "900Mi"
+            cpu: "80m"
+      volumes:
+      - name: mysql-config-volume
+        configMap:
+          name: mysql-config
   volumeClaimTemplates:
   - metadata:
       name: mysql-persistent-storage
@@ -53,4 +60,4 @@ spec:
       resources:
         requests:
           storage: 1Gi
-      storageClassName: nfs-client  # Using NFS client storage class for persistent storage
+      storageClassName: nfs-client
