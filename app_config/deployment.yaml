@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: php-app
-          image: namespaxe/php_app0:1.2   # Replace with your Docker image name and tag
+          image: namespaxe/php_app0:1.3   # Replace with your Docker image name and tag
           ports:
             - containerPort: 80
           volumeMounts:
@@ -23,10 +23,10 @@ spec:
               mountPath: /var/www/html
           resources:
             requests:
-              memory: "15Mi"
+              memory: "70Mi"
               cpu: "10m"
             limits:
-              memory: "15Mi"
+              memory: "75Mi"
               cpu: "10m"
       volumes:
         - name: php-app-volume
