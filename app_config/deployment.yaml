@@ -21,6 +21,13 @@ spec:
           volumeMounts:
             - name: php-app-volume
               mountPath: /var/www/html
+          resources:
+            requests:
+              memory: "15Mi"
+              cpu: "10m"
+            limits:
+              memory: "15Mi"
+              cpu: "10m"
       volumes:
         - name: php-app-volume
           emptyDir: {}  # This is just an example, you can configure persistent storage if needed

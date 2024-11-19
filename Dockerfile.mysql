@@ -1,5 +1,9 @@
 FROM mysql:8.0
 
+# Copy SQL initialization script
 COPY db-init.sql /docker-entrypoint-initdb.d/
+
+# Ensure permissions are set correctly
+RUN chmod 644 /docker-entrypoint-initdb.d/db-init.sql
 
 EXPOSE 3306
