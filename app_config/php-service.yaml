@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-app-service
+  namespace: default
+spec:
+  selector:
+    app: php-app  # This selector matches the label on the deployment
+  ports:
+    - protocol: TCP
+      port: 80        # The port the service will expose
+      targetPort: 80   # The port on the container
+  type: ClusterIP       # This type exposes the service inside the cluster only
