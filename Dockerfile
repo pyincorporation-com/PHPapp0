@@ -1,7 +1,7 @@
 FROM php:8.1-apache
 
 # Copy application code
-COPY . /var/www/html/
+COPY app/ /var/www/html/
 
 # Set permissions and install required extensions
 RUN chown -R www-data:www-data /var/www/html \
