@@ -8,7 +8,7 @@ RUN chmod 644 /docker-entrypoint-initdb.d/db-init.sql
 
 # Fix permissions for MySQL data directory
 USER root
-RUN chown -R mysql:mysql /var/lib/mysql /docker-entrypoint-initdb.d
+RUN rm -rf /var/lib/mysql/* && chown -R mysql:mysql /var/lib/mysql /docker-entrypoint-initdb.d
 
 # Switch back to the mysql user for running the container
 USER mysql
