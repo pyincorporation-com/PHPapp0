@@ -31,7 +31,7 @@ jobs:
         with:
           context: .
           file: Dockerfile.mysql  # Assuming your database Dockerfile is named Dockerfile.mysql
-          tags: ${{ secrets.NS_USERNAME }}/php_app_mysql:1.1
+          tags: ${{ secrets.NS_USERNAME }}/php_app_mysql:1.2
           push: true
 
       # Step 5: Logout from Docker Hub

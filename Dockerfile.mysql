@@ -3,7 +3,14 @@ FROM mysql:8.0
 # Copy SQL initialization script
 COPY db-init.sql /docker-entrypoint-initdb.d/
 
-# Ensure permissions are set correctly
+# Ensure the initialization script has the right permissions
 RUN chmod 644 /docker-entrypoint-initdb.d/db-init.sql
+
+# Fix permissions for MySQL data directory
+USER root
+RUN chown -R mysql:mysql /var/lib/mysql /docker-entrypoint-initdb.d
+
+# Switch back to the mysql user for running the container
+USER mysql
 
 EXPOSE 3306
