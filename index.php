@@ -1,20 +1,38 @@
 <?php
-// Check if form data is submitted
-$name = $email = $message = ""; // Initialize variables
+// Include the database connection file
+require_once 'db_conn.php';
+
+// Initialize variables
+$name = $email = $message = ""; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve submitted data
-    $name = htmlspecialchars($_POST["name"]); // Sanitize user input
+    // Retrieve submitted data and sanitize
+    $name = htmlspecialchars($_POST["name"]);
     $email = htmlspecialchars($_POST["email"]);
     $message = htmlspecialchars($_POST["message"]);
+
+    // Prepare and bind SQL statement
+    $stmt = $conn->prepare("INSERT INTO submissions (name, email, message) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $name, $email, $message);
+
+    // Execute the query
+    if ($stmt->execute()) {
+        echo "<p style='color: green;'>Data successfully inserted into the database.</p>";
+    } else {
+        echo "<p style='color: red;'>Error: " . $stmt->error . "</p>";
+    }
+
+    // Close the statement
+    $stmt->close();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP Form Handling</title>
+    <title>PHP Form Handling with Database</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,10 +80,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 5px;
             max-width: 400px;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f9;
+        }
     </style>
 </head>
 <body>
-    <h1>PHP Form Example</h1>
+    <h1>PHP Form with Database</h1>
     <h2>Submit Your Details</h2>
 
     <!-- HTML Form -->
@@ -82,14 +115,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">Submit</button>
     </form>
 
-    <!-- Display Submitted Data -->
-    <?php if ($name || $email || $message): ?>
-        <div class="result">
-            <h2>Submitted Data:</h2>
-            <p><strong>Name:</strong> <?php echo $name; ?></p>
-            <p><strong>Email:</strong> <?php echo $email; ?></p>
-            <p><strong>Message:</strong> <?php echo $message; ?></p>
-        </div>
-    <?php endif; ?>
+    <!-- Display Data -->
+    <h2>Submitted Data</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            // Fetch all data from the submissions table
+            $result = $conn->query("SELECT id, name, email, message, created_at FROM submissions");
+
+            if ($result->num_rows > 0) {
+                // Output each row of data
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>" . htmlspecialchars($row['id']) . "</td>
+                            <td>" . htmlspecialchars($row['name']) . "</td>
+                            <td>" . htmlspecialchars($row['email']) . "</td>
+                            <td>" . htmlspecialchars($row['message']) . "</td>
+                            <td>" . htmlspecialchars($row['created_at']) . "</td>
+                          </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='5'>No data found</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
 </body>
 </html>
+
+<?php
+// Close the connection at the end of the script
+$conn->close();
+?>
