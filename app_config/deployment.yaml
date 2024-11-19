@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-app
+  template:
+    metadata:
+      labels:
+        app: php-app
+    spec:
+      containers:
+        - name: php-app
+          image: namespaxe/php_app0:1.0   # Replace with your Docker image name and tag
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: php-app-volume
+              mountPath: /var/www/html
+      volumes:
+        - name: php-app-volume
+          emptyDir: {}  # This is just an example, you can configure persistent storage if needed
