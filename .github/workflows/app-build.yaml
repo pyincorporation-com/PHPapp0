@@ -27,7 +27,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          tags: ${{ secrets.NS_USERNAME }}/php_app0:1.0
+          tags: ${{ secrets.NS_USERNAME }}/php_app0:1.1
           push: true
 
       - name: Logout from Docker Hub

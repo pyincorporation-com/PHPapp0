@@ -1,6 +1,6 @@
 <?php
 // Database connection credentials
-$servername = "localhost";
+$servername = "mysql-service"; // Use the service name for external access
 $username = "gabriel";
 $password = "namespaxe@123";
 $dbname = "testdb";
