@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: namespaxe/php_app_mysql:1.2
+        image: namespaxe/php_app_mysql:1.3
         ports:
         - containerPort: 3306
         env:

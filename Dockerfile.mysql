@@ -1,16 +1,17 @@
+# Use the official MySQL image as a base
 FROM mysql:8.0
 
-# Copy SQL initialization script
+# Set environment variables for MySQL setup
+ENV MYSQL_ROOT_PASSWORD=rootpassword
+ENV MYSQL_DATABASE=testdb
+ENV MYSQL_USER=gabriel
+ENV MYSQL_PASSWORD=namespaxe@123
+
+# Copy the database initialization script into the container
 COPY db-init.sql /docker-entrypoint-initdb.d/
 
-# Ensure the initialization script has the right permissions
-RUN chmod 644 /docker-entrypoint-initdb.d/db-init.sql
-
-# Fix permissions for MySQL data directory
-USER root
-RUN rm -rf /var/lib/mysql/* && chown -R mysql:mysql /var/lib/mysql /docker-entrypoint-initdb.d
-
-# Switch back to the mysql user for running the container
-USER mysql
-
+# Expose port 3306 for database connections
 EXPOSE 3306
+
+# Use the default CMD provided by the MySQL image
+CMD ["mysqld"]
